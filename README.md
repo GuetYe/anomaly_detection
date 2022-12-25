@@ -1,2 +1,2 @@
-# anomaly_detection
-test video of the proposed method in "A Novel Anomaly Detection Method for Multimodal WSN Data Flow via a Dynamic Graph Neural Network"
+## Anomaly Detection
+- GLSL: Our implementation of "A Novel Self-Supervised Learning-Based Anomaly Node Detection Method Based on an Autoencoder in Wireless Sensor Networks"
