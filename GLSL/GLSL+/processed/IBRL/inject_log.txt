@@ -1,0 +1,60 @@
+###patch 0 
+inject_modal:1 inject_node:10 start_time:65 end_time:70 inter-modal anomaly, reference modal:0
+inject_modal:0 inject_node:3 start_time:144 end_time:149 inter-modal anomaly, reference modal:1
+inject_modal:2 inject_node:4 start_time:268 end_time:273 surge anomaly
+inject_modal:2 inject_node:11 start_time:346 end_time:351 inter-modal anomaly, reference modal:0
+inject_modal:2 inject_node:12 start_time:439 end_time:444 surge anomaly
+inject_modal:1 inject_node:3 start_time:538 end_time:543 mirro anomaly
+inject_modal:2 inject_node:1 start_time:666 end_time:671 inter-modal anomaly, reference modal:1
+inject_modal:0 inject_node:4 start_time:769 end_time:774 inter-node anomaly, reference node:3
+inject_modal:1 inject_node:2 start_time:857 end_time:862 surge anomaly
+inject_modal:2 inject_node:3 start_time:960 end_time:965 scale anomaly
+inject_modal:1 inject_node:4 start_time:1046 end_time:1051 inter-modal anomaly, reference modal:0
+inject_modal:0 inject_node:9 start_time:1137 end_time:1142 inter-modal anomaly, reference modal:1
+inject_modal:1 inject_node:4 start_time:1242 end_time:1247 mirro anomaly
+inject_modal:2 inject_node:0 start_time:1345 end_time:1350 scale anomaly
+###patch 1 
+inject_modal:0 inject_node:10 start_time:69 end_time:74 mirro anomaly
+inject_modal:0 inject_node:15 start_time:146 end_time:151 inter-modal anomaly, reference modal:1
+inject_modal:0 inject_node:15 start_time:257 end_time:262 inter-modal anomaly, reference modal:1
+inject_modal:0 inject_node:12 start_time:343 end_time:348 scale anomaly
+inject_modal:1 inject_node:6 start_time:441 end_time:446 surge anomaly
+inject_modal:2 inject_node:6 start_time:531 end_time:536 scale anomaly
+inject_modal:2 inject_node:9 start_time:660 end_time:665 scale anomaly
+inject_modal:2 inject_node:15 start_time:750 end_time:755 inter-node anomaly, reference node:14
+inject_modal:0 inject_node:14 start_time:852 end_time:857 inter-node anomaly, reference node:15
+inject_modal:2 inject_node:14 start_time:948 end_time:953 surge anomaly
+inject_modal:0 inject_node:2 start_time:1039 end_time:1044 inter-node anomaly, reference node:1
+inject_modal:0 inject_node:10 start_time:1131 end_time:1136 inter-modal anomaly, reference modal:1
+inject_modal:0 inject_node:9 start_time:1248 end_time:1253 scale anomaly
+inject_modal:2 inject_node:3 start_time:1369 end_time:1374 surge anomaly
+###patch 2 
+inject_modal:0 inject_node:0 start_time:46 end_time:51 scale anomaly
+inject_modal:2 inject_node:8 start_time:144 end_time:149 inter-modal anomaly, reference modal:0
+inject_modal:1 inject_node:8 start_time:235 end_time:240 inter-node anomaly, reference node:9
+inject_modal:2 inject_node:11 start_time:330 end_time:335 mirro anomaly
+inject_modal:1 inject_node:9 start_time:446 end_time:451 scale anomaly
+inject_modal:1 inject_node:7 start_time:534 end_time:539 scale anomaly
+inject_modal:2 inject_node:12 start_time:666 end_time:671 inter-modal anomaly, reference modal:0
+inject_modal:0 inject_node:4 start_time:757 end_time:762 inter-modal anomaly, reference modal:1
+inject_modal:1 inject_node:11 start_time:861 end_time:866 inter-modal anomaly, reference modal:0
+inject_modal:2 inject_node:8 start_time:932 end_time:937 mirro anomaly
+inject_modal:0 inject_node:10 start_time:1034 end_time:1039 inter-modal anomaly, reference modal:1
+inject_modal:1 inject_node:6 start_time:1168 end_time:1173 surge anomaly
+inject_modal:0 inject_node:12 start_time:1249 end_time:1254 surge anomaly
+inject_modal:0 inject_node:8 start_time:1349 end_time:1354 surge anomaly
+###patch 3 
+inject_modal:1 inject_node:0 start_time:48 end_time:53 inter-modal anomaly, reference modal:0
+inject_modal:0 inject_node:15 start_time:137 end_time:142 mirro anomaly
+inject_modal:2 inject_node:14 start_time:266 end_time:271 scale anomaly
+inject_modal:0 inject_node:5 start_time:360 end_time:365 mirro anomaly
+inject_modal:1 inject_node:3 start_time:441 end_time:446 inter-node anomaly, reference node:2
+inject_modal:0 inject_node:14 start_time:533 end_time:538 mirro anomaly
+inject_modal:0 inject_node:11 start_time:631 end_time:636 mirro anomaly
+inject_modal:2 inject_node:11 start_time:733 end_time:738 mirro anomaly
+inject_modal:1 inject_node:4 start_time:857 end_time:862 mirro anomaly
+inject_modal:0 inject_node:0 start_time:944 end_time:949 mirro anomaly
+inject_modal:2 inject_node:2 start_time:1057 end_time:1062 scale anomaly
+inject_modal:0 inject_node:2 start_time:1159 end_time:1164 inter-modal anomaly, reference modal:1
+inject_modal:1 inject_node:1 start_time:1263 end_time:1268 inter-modal anomaly, reference modal:0
+inject_modal:2 inject_node:11 start_time:1355 end_time:1360 scale anomaly

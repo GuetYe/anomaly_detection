@@ -1,0 +1,10 @@
+Number of points without anomaly injection: 200
+Number of points with anomaly injection: 200
+TP: 173
+FN: 27
+TN: 194
+FP: 6
+Prec: 0.9664804469273743
+Rec: 0.865
+F1: 0.9129287598944592
+Speed: 9.785984516143799
