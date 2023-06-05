@@ -1,5 +1,6 @@
 ## readData
 Data reading and preprocessing are an important part of anomaly detection, and also an important part of anomaly detection. In order to highlight the focus of our work, we have focused on feature extraction in spatio-temporal modeling of data. As for the data preprocessing issues you mentioned, we have validated them using public datasets. Specifically, we have implemented the following methods to address data errors and losses in the public dataset IBRL:
+
 There are many missing values in the IBRL dataset, and we only extracted the data from March 4th to March 9th from the original IBRL dataset. Compared to other days, the data from these days have fewer missing and incorrect values. The code implementation for cutting out fixed range data from the original dataset is available in our Github (IBRL_cut.py).
 
 We can use epoch values of records to synchronize data from different nodes.
