@@ -41,7 +41,15 @@ matplotlib
 The sizes of WSN datasets in the real world are very large, and with the increase in the number of layers in GNNs, the computational cost and required memory space increase exponentially, so the computational and storage complexities encountered when training large-scale GNNs are very high. To cope with the high time consumption caused by the massive numbers of sensor nodes and recording moments in large-scale WSN scenarios, this paper proposes an expansion strategy called GLSL+ based on K-means and piecewise aggregate approximation (PAA).
 
 cd GLSL+
+
+There are four control parameters in GLSL+/config.py
 ```
+    parser.add_argument('--use_kmeans_paa', default=True, help="if True means that GLSL+ is in effect")
+    parser.add_argument('--cluster_num', default=3, help="The number of clusters that the entire node set is divided into")
+    parser.add_argument('--use_cluster_block', default=0, help="The cluster number that we consider now")
+    parser.add_argument('--paa_out_dimension', default=2500, help="paa_out_dimension")
+```
+
 Visual analysis of anomaly:
 ```
 python anomaly_visial.py
