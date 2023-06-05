@@ -38,5 +38,13 @@ PyTorch Geometric
 matplotlib
 
 ## GLSL+
+The sizes of WSN datasets in the real world are very large, and with the increase in the number of layers in GNNs, the computational cost and required memory space increase exponentially, so the computational and storage complexities encountered when training large-scale GNNs are very high. To cope with the high time consumption caused by the massive numbers of sensor nodes and recording moments in large-scale WSN scenarios, this paper proposes an expansion strategy called GLSL+ based on K-means and piecewise aggregate approximation (PAA).
 
+cd GLSL+
+```
+Visual analysis of anomaly:
+```
+python anomaly_visial.py
+```
+training part will be available after the manuscript is accepted.
 
