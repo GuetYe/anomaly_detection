@@ -3,5 +3,5 @@ Data reading and preprocessing are an important part of anomaly detection, and a
 
 There are many missing values in the IBRL dataset, and we only extracted the data from March 4th to March 9th from the original IBRL dataset. Compared to other days, the data from these days have fewer missing and incorrect values. The code implementation for cutting out fixed range data from the original dataset is available in our Github (IBRL_cut.py).
 
-We can use epoch values of records to synchronize data from different nodes.
+We can use epoch value of record to synchronize data from different nodes.
 Missing data is inevitable when reading sensor network data, that is, during a certain epoch, some nodes may have observed data, while others may not. To solve this problem, we first determine k sampling epochs, ideally reading the data of all nodes of these k sampling epochs. However, data loss is inevitable when node j is missing data in the i-th sampling epoch, we extract the observed data of node j from the p-th sampling epoch closest to the i-th sampling epoch, and then assign it to the data of node j in the i-th sampling epoch. The code implementation is available in our Github (get_similar and get_IBRL_data function of IBRL_load.py).
