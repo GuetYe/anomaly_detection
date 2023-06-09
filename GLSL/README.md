@@ -28,6 +28,7 @@ Test process:
 ```
 python test.py
 ```
+result file can be found in save/result.txt
 ## Dataset
 We use IBRL WSN dataset for experiment. The origin data can be found in http://db.csail.mit.edu/labdata/labdata.html.
 
