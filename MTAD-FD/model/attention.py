@@ -114,37 +114,51 @@ class TemporalBlock(nn.Module):
 
 
 class CrossAttention(nn.Module):
-    def __init__(self, seq_len1, seq_len2, k_dim, v_dim, num_heads):
+    def __init__(self, seq_len, in_channels):
         super(CrossAttention, self).__init__()
-        self.num_heads = num_heads
-        self.k_dim = k_dim
-        self.v_dim = v_dim
+        self.in_channels = in_channels
+        self.fusion = nn.ModuleList([Fusion(seq_len=seq_len) for _ in range(6)])
         
-        self.proj_q1 = nn.Linear(seq_len1, k_dim * num_heads, bias=False)
-        self.proj_k2 = nn.Linear(seq_len2, k_dim * num_heads, bias=False)
-        self.proj_v2 = nn.Linear(seq_len2, v_dim * num_heads, bias=False)
-        self.proj_o = nn.Linear(v_dim * num_heads, seq_len1)
-        
-    def forward(self, x1, x2, mask=None):
-        batch_size, seq_m1, seq_len1 = x1.size()
-        seq_m2 = x2.size(1)
-        
-        q1 = self.proj_q1(x1).view(batch_size, seq_m1, self.num_heads, self.k_dim)#.permute(0, 2, 1, 3)
-        k2 = self.proj_k2(x2).view(batch_size, seq_m2, self.num_heads, self.k_dim).permute(0, 1, 3, 2)#.permute(0, 2, 3, 1)
-        v2 = self.proj_v2(x2).view(batch_size, seq_m2, self.num_heads, self.v_dim)#.permute(0, 2, 1, 3)
-        
-        attn = torch.matmul(k2, q1) / self.k_dim**0.5
-        
-        if mask is not None:
-            attn = attn.masked_fill(mask == 0, -1e9)
-        
-        attn = F.softmax(attn, dim=-1)
-        output = torch.matmul(v2, attn).view(batch_size, seq_m1, -1)#.permute(0, 2, 1, 3).contiguous().view(batch_size, seq_m1, -1)
-        output = self.proj_o(output)
-        
-        return output
+    def forward(self, x):
+        x_out = []
+        for i in range(self.in_channels):
+            # 生成保留的索引列表（排除 index_to_remove）
+            keep_indices = [index for index in range(x.shape[1]) if index != i]
 
-    
+            # 沿目标维度切片
+            x1 = x.index_select(
+                dim=1,
+                index=torch.tensor(keep_indices, device=x.device)
+            )
+
+            x2=x[:,i,:]
+            x_out.append(self.fusion[i](x2,x1))
+        x = torch.stack(x_out, dim=1)
+        
+        return x
+
+
+class Fusion(nn.Module):
+    def __init__(self, seq_len):
+        super(Fusion, self).__init__()
+        self.proj_q1 = nn.Linear(seq_len, seq_len, bias=False)
+        self.proj_k2 = nn.Linear(seq_len, seq_len, bias=False)
+        self.proj_v2 = nn.Linear(seq_len, seq_len, bias=False)
+        
+    def forward(self, x1, x2):
+        
+        # x2.permute(1, 2, 0)
+        q1 = self.proj_q1(x1)
+        k2 = self.proj_k2(x2).permute(1, 2, 0)
+        v2 = self.proj_v2(x2).permute(1, 0, 2)
+        
+        attn = torch.matmul(q1, k2)# / self.k_dim**0.5
+        attn = F.softmax(attn, dim=-1)
+        output = torch.matmul(attn, v2)
+ 
+        return torch.mean(output, dim=0) # / torch.sum
+
+
 # ########## fourier layer #############
 class FourierAttention(nn.Module):
     def __init__(self, seq_len):

@@ -5,7 +5,7 @@ import argparse
 
 # 纠正：数据第二和第三维反了，更正LayerNorm为数据长度
 
-class MLPBlock(nn.Module):
+class MLP(nn.Module):
     def __init__(self, input_dim, mlp_dim) :
         super().__init__()
         self.fc1 = nn.Linear(input_dim, mlp_dim)
@@ -26,7 +26,7 @@ class FactorizedTemporalMixing(nn.Module):
         assert sampling in [1, 2, 3, 4, 6, 8, 12]
         self.sampling = sampling
         self.temporal_fac = nn.ModuleList([
-            MLPBlock(input_dim // sampling, mlp_dim) for _ in range(sampling)])
+            MLP(input_dim // sampling, mlp_dim) for _ in range(sampling)])
         self.Avg = nn.AdaptiveAvgPool1d(input_dim)
 
     def merge(self, shape, x_list):
@@ -50,17 +50,17 @@ class FactorizedChannelMixing(nn.Module):
     def __init__(self, input_dim, factorized_dim) :
         super().__init__()
         assert input_dim > factorized_dim
-        self.channel_mixing = MLPBlock(input_dim, factorized_dim)
+        self.channel_mixing = MLP(input_dim, factorized_dim)
 
     def forward(self, x):
 
         return self.channel_mixing(x)
 
 
-class MixerBlock(nn.Module):
+class MLPBlock(nn.Module):
     def __init__(self, tokens_dim, channels_dim, tokens_hidden_dim, channels_hidden_dim, fac_T, fac_C, sampling, norm_flag):
         super().__init__()
-        self.tokens_mixing = FactorizedTemporalMixing(tokens_dim, tokens_hidden_dim, sampling) if fac_T else MLPBlock(tokens_dim, tokens_hidden_dim)
+        self.tokens_mixing = FactorizedTemporalMixing(tokens_dim, tokens_hidden_dim, sampling) if fac_T else MLP(tokens_dim, tokens_hidden_dim)
         self.channels_mixing = FactorizedChannelMixing(channels_dim, channels_hidden_dim) if fac_C else None
         self.norm = nn.LayerNorm(tokens_dim) if norm_flag else None
 
@@ -102,7 +102,7 @@ class Model(nn.Module):
     def __init__(self, configs):
         super().__init__()
         self.mlp_blocks = nn.ModuleList([
-            MixerBlock(configs.seq_len, configs.enc_in, configs.d_model, configs.d_ff, configs.fac_T, configs.fac_C, configs.sampling, configs.norm) for _ in range(configs.e_layers)
+            MLPBlock(configs.seq_len, configs.enc_in, configs.d_model, configs.d_ff, configs.fac_T, configs.fac_C, configs.sampling, configs.norm) for _ in range(configs.e_layers)
         ])   
         self.projection = ChannelProjection(configs.seq_len, configs.pred_len, configs.enc_in, configs.individual)
 
@@ -133,7 +133,7 @@ if __name__ == '__main__':
     parser.add_argument('--rev', action='store_true', default=False, help='whether to apply RevIN')    
 
     args = parser.parse_args()
-    model = MixerBlock(args.seq_len, args.enc_in, args.d_model, args.d_ff, args.fac_T, args.fac_C, args.sampling, args.norm)
+    model = MLPBlock(args.seq_len, args.enc_in, args.d_model, args.d_ff, args.fac_T, args.fac_C, args.sampling, args.norm)
     # # criterion = nn.MSELoss()
     # model = Model(args)
     # # model_optim = torch.optim.Adam(model.parameters(), lr=0.001)

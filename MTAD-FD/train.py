@@ -1,5 +1,5 @@
 from model.mymodel import myFormer, meltFormer
-from data.dataset.mydata import sensor_data
+from data.dataset.mydata import sensor_data, adj_data
 import torch
 import argparse
 import matplotlib.pyplot as plt
@@ -44,7 +44,7 @@ class My_loss(torch.nn.Module):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Multivariate Time Series Forecasting')
     # forecasting task
-    parser.add_argument('--seq_len', type=int, default=300, help='input sequence length')
+    parser.add_argument('--seq_len', type=int, default=150, help='input sequence length')
     # parser.add_argument('--label_len', type=int, default=20, help='start token length')
     parser.add_argument('--pred_len', type=int, default=300, help='prediction sequence length')
     parser.add_argument('--enc_in', type=int, default=3, help='encoder input size')
@@ -60,12 +60,14 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    adj=torch.ones(size=(51, 51)).to(device)
-    # former=myFormer(args, adj).to(device)
-    former=meltFormer(args, adj).to(device)
+    # adj=torch.ones(size=(51, 51)).to(device)
+    adj=adj_data("./data/dataset/IBRL/node.txt")
+    adj_norm=torch.Tensor(adj.normalize_adjacency(8)).to(device)
+    former=myFormer(args, adj_norm).to(device)
+    # former=meltFormer(args, adj).to(device)
     revin_layer.to(device)
     file_path="./data/dataset"
-    data_train=sensor_data(file_path,stride=300, mode='train')
+    data_train=sensor_data(file_path, mode='train')
     data_test=sensor_data(file_path, mode='test')
     criterion = My_loss()#torch.nn.MSELoss()#torch.nn.BCELoss()
     model_optim = torch.optim.Adam(former.parameters(), lr=0.001)
@@ -97,20 +99,6 @@ if __name__ == '__main__':
             # e_loss.append(loss.item())        
             train_loss.append(loss.item())
 
-            # wi_tr=wi_tr.cpu().detach().numpy()
-            # da_tr=da_tr.cpu().detach().numpy()
-            # output=output.cpu().detach().numpy()
-            # if i:
-            #     win_tem=wi_tr
-            #     data_tem=output
-            #     da_tem=da_tr
-            #     label_tem=la_tr
-            #     i=0
-            # else:
-            #     win_tem=np.append(win_tem,wi_tr,axis=2)
-            #     data_tem=np.append(data_tem,output,axis=2)
-            #     da_tem=np.append(da_tem,da_tr,axis=2)
-            #     label_tem=np.append(label_tem,la_tr,axis=2)    
 
         train_loss=np.array(train_loss).mean()
         print("train_loss:",train_loss)
@@ -134,25 +122,11 @@ if __name__ == '__main__':
             dra[:,0,:] = dra[:,0,:]/8.5
             dra[:,1,:] = dra[:,1,:]/13.5
             cha=dra.cpu().detach().numpy()
-            out1=np.where(cha>=0.3,1,0)
+            out1=np.where(cha>=0.4,1,0)
             acc = f1Score(out1, la_te)
             # acc = np.mean(out1 == la_te.cpu().detach().numpy())
             test_loss.append(loss.item())
         
-            # wi_te=wi_te.cpu().detach().numpy()
-            # da_te=da_te.cpu().detach().numpy()
-            # output=output.cpu().detach().numpy()
-            # if i:
-            #     win_tem=wi_te
-            #     data_tem=output
-            #     da_tem=da_te
-            #     label_tem=la_te
-            #     i=0
-            # else:
-            #     win_tem=np.append(win_tem,wi_te,axis=2)
-            #     data_tem=np.append(data_tem,output,axis=2)
-            #     da_tem=np.append(da_tem,da_te,axis=2)
-            #     label_tem=np.append(label_tem,la_te,axis=2)  
         
         # print(la_te)
         test_loss=np.array(test_loss).mean()
@@ -162,31 +136,6 @@ if __name__ == '__main__':
         if bloss > test_loss:
             bloss = test_loss
             print(">>>>>loss:{}".format(bloss))
-            torch.save(former.state_dict(), "./-gcn_weights/model_{}.pth".format(epoch)) 
+            torch.save(former.state_dict(), "./weights/model_{}.pth".format(epoch)) 
     
-    plt.figure()
-    plt.plot(history)
-    plt.savefig("./record/loss_gcn-.png")
-        
-
-
-
-    # dra = abs(data_tem-da_tem)
-    # dra[:,0,:] = dra[:,0,:]/8.5
-    # dra[:,1,:] = dra[:,1,:]/13.5
-    
-    # plt.figure()
-    # plt.plot(win_tem[0].T)
-    # plt.figure()
-    # plt.plot(data_tem[0].T)
-    # plt.figure()
-    # plt.plot(da_tem[0].T)
-    # plt.figure()
-    # plt.plot(dra[0].T)
-    # plt.figure()
-    # plt.plot(label_tem[0].T)
-    # plt.show()
-
-
-
 
